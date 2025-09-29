@@ -1,0 +1,25 @@
+# AskTheDocs - Tema: Emerald + Slate
+# Referência: https://docs.streamlit.io/develop/concepts/configuration/theming
+
+[theme]
+base = "dark"                       # Altere para "light" se preferir o tema claro como padrão
+primaryColor = "#10B981"            # Emerald 500
+textColor = "#E2E8F0"               # Texto no dark
+backgroundColor = "#0B1220"         # Fundo app (dark)
+secondaryBackgroundColor = "#111827" # Fundo sidebar/cards (dark)
+
+# Paleta e bordas
+borderColor = "#64748B"             # Slate 500 (accent)
+
+# Fontes (usando fontes do sistema que são similares)
+font = "sans serif"                 # Fonte base
+headingFont = "sans serif"          # Fonte para títulos
+
+# ---------------------------
+# Preset para tema claro (exemplo)
+# Para usar, ajuste base="light" e descomente os valores abaixo:
+# textColor = "#0F172A"                # Texto no light
+# backgroundColor = "#FFFFFF"
+# secondaryBackgroundColor = "#F8FAFC"
+# borderColor = "#64748B"
+

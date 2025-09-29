@@ -222,8 +222,8 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 **Ailton Kupinski**
 
-- GitHub: [@seu-usuario](https://github.com/seu-usuario)
-- LinkedIn: [Ailton Kupinski](https://linkedin.com/in/ailton-kupinski)
+- GitHub: [@ailtonkupinski](https://github.com/ailtonkupinski)
+- LinkedIn: [Ailton Kupinski](https://www.linkedin.com/in/ailton-fabio-kupinski/)
 
 ## 🙏 Agradecimentos
 

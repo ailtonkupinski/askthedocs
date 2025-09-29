@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 320 80" role="img" aria-label="AskTheDocs logo">
+  <defs>
+    <!-- Gradiente neutro-legível em light e dark -->
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#14B8A6"/>
+    </linearGradient>
+  </defs>
+  <!-- Marca: card/documento com gradiente -->
+  <rect rx="12" ry="12" x="8" y="8" width="64" height="64" fill="url(#g)"/>
+  <path d="M28 26h24a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H28a2 2 0 0 1-2-2V28a2 2 0 0 1 2-2zm2 4v16h20V30H30zm0 0l6-4h12l6 4" fill="#FFFFFF" fill-opacity="0.98"/>
+  <!-- Wordmark com cores do tema Emerald + Slate -->
+  <text x="88" y="50" font-family="Inter, Segoe UI, Roboto, Arial, sans-serif" font-size="28" font-weight="700" fill="#10B981">Ask</text>
+  <text x="145" y="50" font-family="Inter, Segoe UI, Roboto, Arial, sans-serif" font-size="28" font-weight="700" fill="#64748B">The</text>
+  <text x="195" y="50" font-family="Inter, Segoe UI, Roboto, Arial, sans-serif" font-size="28" font-weight="700" fill="#10B981">Docs</text>
+</svg>
+

@@ -14,7 +14,7 @@ import streamlit as st
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from presentation import scraping, chat
+from presentation import scraping, chat, docs_list
 
 # Carrega variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -31,15 +31,23 @@ st.title("AskTheDocs")
 with st.sidebar:
     # Sistema de logo adaptativo ao tema (claro/escuro)
     _base_dir = Path(__file__).parent
-    _logo_light_path = _base_dir / "assets" / "logo_white.svg"
-    _logo_dark_path = _base_dir / "assets" / "logo_dark.svg"
-    _theme_base = st.get_option("theme.base") or "light"
-    _logo_to_use = _logo_dark_path if _theme_base == "dark" else _logo_light_path
-    st.image(str(_logo_to_use), width='stretch')
+    _logo_path = _base_dir / "assets" / "logo.svg"
+    st.image(str(_logo_path), width='stretch')
     
-    # Seletor de modo de operação
-    st.header("Documento")
-    mode = st.radio("Modo:", ("Chat", "Scraping"))
+    # Navegação principal
+    st.header("Navegação")
+    
+    # Verifica se st.navigation está disponível (Streamlit 1.28+)
+    try:
+        # Tenta usar st.navigation se disponível
+        if hasattr(st, 'navigation'):
+            selected = st.navigation(["Chat", "Add doc", "Lista de docs"], default="Chat")
+        else:
+            # Fallback para versões mais antigas
+            selected = st.radio("Modo:", ("Chat", "Add doc", "Lista de docs"), index=0)
+    except Exception:
+        # Fallback final
+        selected = st.radio("Modo:", ("Chat", "Add doc", "Lista de docs"), index=0)
 
     st.divider()
     st.subheader("Documentações disponíveis")
@@ -67,7 +75,9 @@ if "collection" not in st.session_state:
     st.session_state.collection = None
 
 # Roteamento para diferentes modos
-if mode == "Scraping":
+if selected == "Add doc":
     scraping.show()
-else:
+elif selected == "Lista de docs":
+    docs_list.show()
+else:  # Chat (padrão)
     chat.show()

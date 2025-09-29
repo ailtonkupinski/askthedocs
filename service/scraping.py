@@ -8,7 +8,10 @@ Suporta crawling assíncrono com polling de status.
 
 import os
 import time
+import json
 import requests
+from datetime import datetime, timezone
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,13 +32,14 @@ class ScrapingService:
         self.api_key = os.getenv("FIRECRAWL_API_KEY")
         self.api_url = os.getenv("FIRECRAWL_API_URL") or "https://api.firecrawl.dev"
 
-    def scrape_website(self, url, collection_name):
+    def scrape_website(self, url, collection_name, version):
         """
         Executa o scraping de um website e salva o conteúdo em uma coleção.
         
         Args:
             url (str): URL do website a ser processado
             collection_name (str): Nome da coleção onde salvar o conteúdo
+            version (str): Versão da documentação
             
         Returns:
             dict: Resultado do scraping com status e número de arquivos salvos
@@ -152,8 +156,84 @@ class ScrapingService:
                     f.write(markdown_content)
                 saved_count += 1
 
+            # Salva metadados da coleção
+            self._save_collection_metadata(collection_name, url, version, saved_count)
+            
             return {"success": True, "files": saved_count}
         
         except Exception as e:
             print(f"Erro ao processar a URL {url}: {str(e)}")
             return {"success": False, "error": str(e)}
+    
+    def _save_collection_metadata(self, collection_name, url, version, files_count):
+        """
+        Salva metadados da coleção e atualiza o índice global.
+        
+        Args:
+            collection_name (str): Nome da coleção
+            url (str): URL original
+            version (str): Versão da documentação
+            files_count (int): Número de arquivos salvos
+        """
+        try:
+            # Cria diretório da coleção se não existir
+            collection_path = Path(f"data/collections/{collection_name}")
+            collection_path.mkdir(parents=True, exist_ok=True)
+            
+            # Metadados da coleção
+            metadata = {
+                "name": collection_name,
+                "url": url,
+                "version": version,
+                "inserted_at": datetime.now(timezone.utc).isoformat(),
+                "files_count": files_count
+            }
+            
+            # Salva metadata.json da coleção (escrita atômica)
+            metadata_file = collection_path / "metadata.json"
+            temp_file = collection_path / "metadata.json.tmp"
+            
+            with open(temp_file, "w", encoding="utf-8") as f:
+                json.dump(metadata, f, indent=2, ensure_ascii=False)
+            
+            temp_file.rename(metadata_file)
+            
+            # Atualiza índice global
+            self._update_global_index(metadata)
+            
+        except Exception as e:
+            print(f"Erro ao salvar metadados da coleção {collection_name}: {str(e)}")
+    
+    def _update_global_index(self, metadata):
+        """
+        Atualiza o índice global de coleções.
+        
+        Args:
+            metadata (dict): Metadados da coleção
+        """
+        try:
+            index_file = Path("data/collections/index.json")
+            index_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Carrega índice existente ou cria novo
+            if index_file.exists():
+                with open(index_file, "r", encoding="utf-8") as f:
+                    collections = json.load(f)
+            else:
+                collections = []
+            
+            # Remove entrada existente com mesmo nome (upsert)
+            collections = [c for c in collections if c.get("name") != metadata["name"]]
+            
+            # Adiciona nova entrada
+            collections.append(metadata)
+            
+            # Salva índice atualizado (escrita atômica)
+            temp_file = index_file.with_suffix(".json.tmp")
+            with open(temp_file, "w", encoding="utf-8") as f:
+                json.dump(collections, f, indent=2, ensure_ascii=False)
+            
+            temp_file.rename(index_file)
+            
+        except Exception as e:
+            print(f"Erro ao atualizar índice global: {str(e)}")
