@@ -7,6 +7,13 @@ Utiliza embeddings para buscar contexto relevante e um LLM para gerar respostas.
 """
 
 import streamlit as st
+import sys
+from pathlib import Path
+
+# Adiciona o diretório raiz ao path para importar módulos
+root_dir = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(root_dir))
+
 from service.rag import RAGService
 
 def show():

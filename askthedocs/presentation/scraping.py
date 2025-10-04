@@ -7,6 +7,13 @@ coleções locais para uso com o sistema RAG.
 """
 
 import streamlit as st
+import sys
+from pathlib import Path
+
+# Adiciona o diretório raiz ao path para importar módulos
+root_dir = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(root_dir))
+
 from service.scraping import ScrapingService
 
 def show():

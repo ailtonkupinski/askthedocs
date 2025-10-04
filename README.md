@@ -124,6 +124,61 @@ streamlit run askthedocs/app.py
 
 A aplicação estará disponível em `http://localhost:8501`
 
+## 🐳 Usando Firecrawl self-hosted (Docker Compose)
+
+Se você não quiser usar a API SaaS do Firecrawl, é possível rodar o Firecrawl localmente com Docker Compose e apontar o AskTheDocs para esse endpoint.
+
+### 1) Crie o `docker-compose.yml`
+
+```yaml
+version: "3.9"
+services:
+  firecrawl:
+    image: mendableai/firecrawl:latest
+    container_name: firecrawl
+    ports:
+      - "3002:3002"   # expõe a API em http://localhost:3002
+    environment:
+      # Defina uma API key para uso local (qualquer string forte)
+      - FIRECRAWL_API_KEY=local-dev-key-CHANGE-ME
+      # (Opcional) variáveis adicionais conforme sua necessidade
+      # - NODE_ENV=production
+      # - LOG_LEVEL=info
+    restart: unless-stopped
+```
+
+Suba o serviço:
+
+```bash
+docker compose up -d
+```
+
+Teste a API local (opcional):
+
+```bash
+curl -H "Authorization: Bearer local-dev-key-CHANGE-ME" \
+     http://localhost:3002/v1/health
+```
+
+### 2) Aponte o AskTheDocs para o Firecrawl local
+
+No seu `.env` do projeto, ajuste:
+
+```env
+FIRECRAWL_API_KEY=local-dev-key-CHANGE-ME
+FIRECRAWL_API_URL=http://localhost:3002
+```
+
+Obs.:
+- O serviço de scraping do projeto já lê essas variáveis e chamará `POST /v1/crawl` no host local.
+- Se você mudar a porta no compose, ajuste `FIRECRAWL_API_URL` para coincidir.
+- Mantenha a mesma API key no compose e no `.env`.
+
+### 3) Considerações
+- Em máquinas com firewall/antivírus restritivos, libere a porta 3002.
+- Para logs, rode `docker compose logs -f firecrawl`.
+- Para atualizar a imagem: `docker compose pull && docker compose up -d`.
+
 ## 🚀 Como Usar
 
 ### 1. Modo Scraping
@@ -224,14 +279,6 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 - GitHub: [@ailtonkupinski](https://github.com/ailtonkupinski)
 - LinkedIn: [Ailton Kupinski](https://www.linkedin.com/in/ailton-fabio-kupinski/)
-
-## 🙏 Agradecimentos
-
-- [Streamlit](https://streamlit.io/) - Framework web incrível
-- [LangChain](https://langchain.com/) - Framework para aplicações LLM
-- [Groq](https://groq.com/) - API de LLM rápida e eficiente
-- [Firecrawl](https://firecrawl.dev/) - API de web scraping
-- [HuggingFace](https://huggingface.co/) - Modelos de embeddings
 
 ## 📊 Roadmap
 

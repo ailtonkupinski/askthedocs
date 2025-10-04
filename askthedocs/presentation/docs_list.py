@@ -9,8 +9,13 @@ Permite selecionar documentações para uso no chat.
 import streamlit as st
 import json
 import os
+import sys
 from pathlib import Path
 from datetime import datetime
+
+# Adiciona o diretório raiz ao path para importar módulos
+root_dir = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(root_dir))
 
 def show():
     """
