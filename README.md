@@ -2,8 +2,7 @@
 
 <div align="center">
 
-![AskTheDocs Logo](askthedocs/assets/logo_white.svg#gh-light-mode-only)
-![AskTheDocs Logo](askthedocs/assets/logo_dark.svg#gh-dark-mode-only)
+![AskTheDocs Logo](askthedocs/assets/logo.svg)
 
 **Uma aplicação inteligente para interagir com documentação usando RAG (Retrieval-Augmented Generation)**
 
